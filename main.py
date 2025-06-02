@@ -41,8 +41,3 @@ async def protected():
 @app.post("/refresh")
 async def refresh(request: EmailRequest):
     return await refresh_access_token(request.email)
-
-
-# @app.get("/debug_tokens")
-# def debug_tokens():
-#     return load_all_tokens()

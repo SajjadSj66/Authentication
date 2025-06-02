@@ -1,5 +1,4 @@
 from datetime import timedelta
-
 import httpx
 from dotenv import load_dotenv
 from token_store import *
@@ -10,6 +9,10 @@ AUTH_API_BASE = os.getenv("AUTH_API_KEY")
 
 
 async def register_user(email: str, password: str):
+    """
+    In this section, the user registers by
+    entering their email and password.
+    """
     url = f"{AUTH_API_BASE}/register"
     data = {
         "email": email,
@@ -37,6 +40,11 @@ async def register_user(email: str, password: str):
 
 
 async def login_user(email: str, password: str):
+    """
+     In this section, the user logs in using their email and password to
+     generate an access token and refresh token
+     for each user and store them as JSON.
+    """
     url = f"{AUTH_API_BASE}/login"
     data = {"username": email, "password": password}
     print("Sending login payload:", data)
@@ -77,17 +85,18 @@ async def login_user(email: str, password: str):
 
 
 async def get_protected_data(email: str):
-    print("ok1")
+    """
+    This code manages the tokens and if the access token
+    expires based on time, it sends a refresh token and
+    gets and stores the new access token.
+    """
     tokens = load_tokens(email)
-    print(tokens)
     if not tokens:
         return {"message": "No tokens found!"}
 
-    print("ok2")
     access_token = tokens.get("access_token")
     access_token_time = tokens.get("access_token_time")
 
-    print(access_token)
     # Checking access token expiration
     if access_token_time:
         access_time = datetime.fromisoformat(access_token_time)
@@ -139,6 +148,9 @@ async def get_protected_data(email: str):
 
 
 async def refresh_access_token(email: str):
+    """
+    Get a new token using a refresh token.
+    """
     tokens = load_tokens(email)
     if not tokens:
         return {"message": "No refresh token found for this user!"}

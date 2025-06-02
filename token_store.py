@@ -6,8 +6,10 @@ TOKEN_FILE = 'tokens.json'
 
 
 def save_tokens(email, access_token, refresh_token):
+    """
+    It stores the email, access token, refresh token, and date in the tokens.json file.
+    """
     tokens = load_all_tokens()
-    print(tokens)
     tokens[email] = {
         "email": email,
         "access_token": access_token,
@@ -22,7 +24,11 @@ def save_tokens(email, access_token, refresh_token):
     with open("last_user.txt", "w") as f:
         f.write(email)
 
+
 def get_last_logged_email():
+    """
+    Returns the last email.
+    """
     try:
         with open(TOKEN_FILE, 'r') as f:
             data = json.load(f)
@@ -34,11 +40,13 @@ def get_last_logged_email():
         return None
 
 
+# Loads the tokens.
 def load_tokens(email):
     tokens = load_all_tokens()
     return tokens.get(email)
 
 
+# Loads the all tokens.
 def load_all_tokens():
     if not os.path.exists(TOKEN_FILE):
         return {}
